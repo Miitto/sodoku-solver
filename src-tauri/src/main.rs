@@ -1,6 +1,7 @@
-mod grid;
+// Prevents additional console window on Windows in release, DO NOT REMOVE!!
+#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use grid::Grid;
+mod grid;
 
 fn main() {
     #[rustfmt::skip]
@@ -32,4 +33,9 @@ fn main() {
         elapsed.subsec_micros(),
         elapsed.subsec_nanos()
     );
+
+    tauri::Builder::default()
+        .invoke_handler(tauri::generate_handler![])
+        .run(tauri::generate_context!())
+        .expect("error while running tauri application");
 }
