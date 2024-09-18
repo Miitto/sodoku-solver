@@ -37,6 +37,27 @@ impl Grid {
         true
     }
 
+    pub fn solutions(&mut self) -> Vec<Vec<Cell>> {
+        let mut solutions = Vec::new();
+
+        for row in 0..9 {
+            for col in 0..9 {
+                if self.cells[(row * 9 + col) as usize] == 0 {
+                    for n in 1..=9 {
+                        if self.possible(row, col, n) {
+                            self.cells[(row * 9 + col) as usize] = n;
+                            if self.solve() {
+                                solutions.push(self.cells.clone());
+                            }
+                            self.cells[(row * 9 + col) as usize] = 0;
+                        }
+                    }
+                }
+            }
+        }
+        solutions
+    }
+
     pub fn new(start: &Option<Vec<Option<Cell>>>) -> Grid {
         let mut grid = Grid { cells: vec![0; 81] };
 

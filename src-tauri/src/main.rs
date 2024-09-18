@@ -3,6 +3,14 @@
 
 mod grid;
 
+use grid::Grid;
+
+#[tauri::command]
+fn solve_sudoku(cells: Vec<Option<u8>>) -> Vec<Vec<u8>> {
+    let mut grid = Grid::new(&Some(cells));
+    grid.solutions()
+}
+
 fn main() {
     #[rustfmt::skip]
     let start = Some(vec![
@@ -35,7 +43,7 @@ fn main() {
     );
 
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![])
+        .invoke_handler(tauri::generate_handler![solve_sudoku])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
